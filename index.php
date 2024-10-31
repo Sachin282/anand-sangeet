@@ -11,13 +11,13 @@ $detect = new Mobile_Detect();
 //    print_r('<h1>Mobile</h1>');
 // else
 //    print_r('<h1>Desktop</h1>');
-
+$env = parse_ini_file('.env');
 if(isset($_GET['action']) && $_GET['action'] == 'logout'){
   session_unset();
   session_destroy(); 
 }
 
-$conn = mysqli_connect('localhost','root','','anandsangeet');
+$conn = mysqli_connect($env['DB_HOST'],$env['DB_USERNAME'],$env['DB_PASSWORD'],$env['DB_DATABASE']);
 $section1 = mysqli_query($conn,'select * from content where section = 1 order by position asc');
 $section1 = mysqli_fetch_all ($section1, MYSQLI_ASSOC);
 $section1 = json_decode(json_encode($section1, JSON_FORCE_OBJECT));
@@ -62,15 +62,14 @@ $section7 = json_decode(json_encode($section7, JSON_FORCE_OBJECT));
   <script type="text/javascript" async="" src="./Home-Default_files/ec.js.download"></script>
   <script type="text/javascript" async="" src="./Home-Default_files/analytics.js.download"></script>
   <script async="" src="./Home-Default_files/gtm.js.download"></script>
-  <script src="./Home-Default_files/3ts2ksMwXvKRuG480KNifJ2_JNM.js.download"></script>
-  <script src="./Home-Default_files/4o300efCt-CXoq1JEC-sVReFz48.js.download"></script>
   <link rel="icon" href="images/logo.jpeg" type="image/x-icon">
   <!-- Stylesheets-->
   <link rel="stylesheet" type="text/css" href="./Home-Default_files/css">
   <link rel="stylesheet" href="./Home-Default_files/bootstrap.css">
   <link rel="stylesheet" href="./Home-Default_files/style.css">
   <link rel="stylesheet" href="fontawesome.css">
-  <link rel="stylesheet" href="data:text/css;charset=utf-8;base64"></head>
+  <!-- <link rel="stylesheet" href="data:text/css;charset=utf-8;base64"> -->
+</head>
   <style type="text/css">
   	.top_image{
   		position: fixed;
@@ -136,8 +135,10 @@ $section7 = json_decode(json_encode($section7, JSON_FORCE_OBJECT));
                 foreach ($section1 as $section) {
                   if($detect->isMobile()){
                     if ($section->type == 'mobile') {
-                      echo '<div class="swiper-slide bg-gray-lighter swiper-slide-active" data-slide-bg="'.$section->value.'" data-swiper-slide-index="1" style="bakground-image: url(\''.$section->value.'\'); background-size: cover; width: 1519px;" onclick="document.getElementById(\'banner_'.$section->value.'\').click();"></div>
-                      <input type="file" name="banner_'.$section->value.'" id="banner_'.$section->value.'">';
+                      echo '<div class="swiper-slide bg-gray-lighter swiper-slide-active" data-slide-bg="'.$section->value.'" data-swiper-slide-index="1" style="bakground-image: url(\''.$section->value.'\'); background-size: cover; width: 1519px;" onclick="document.getElementById(\'banner_'.$section->value.'\').click();"></div>';
+                      if(isset($_SESSION['admin']) && $_SESSION['admin']){ 
+                        echo '<input type="file" name="banner_'.$section->value.'" id="banner_'.$section->value.'">';
+                      }
                       echo '<script> document.getElementById("pagination").innerHTML += "<span class=\'swiper-pagination-bullet\'></span>"; 
                               </script>';
                     }
@@ -241,7 +242,7 @@ $section7 = json_decode(json_encode($section7, JSON_FORCE_OBJECT));
               
             </div>
           </div>
-          <div class="object-wrap__body object-wrap__body-sizing-1 object-wrap__body-md-right bg-image" style="background-image: url(images/home-default-1-960x640.jpg)"></div>
+          <!-- <div class="object-wrap__body object-wrap__body-sizing-1 object-wrap__body-md-right bg-image" style="background-image: url(images/home-default-1-960x640.jpg)"></div> -->
         </section>
 
 

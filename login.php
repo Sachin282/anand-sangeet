@@ -3,9 +3,10 @@ session_start();
 ini_set('display_startup_errors', 1);
 ini_set('display_errors', 1);
 error_reporting(-1);
+$env = parse_ini_file('.env');
 
 	if(isset($_POST['email']) && isset($_POST['password'])){
-		$conn = mysqli_connect('localhost','root','','anandsangeet');
+		$conn = mysqli_connect($env['DB_HOST'],$env['DB_USERNAME'],$env['DB_PASSWORD'],$env['DB_DATABASE']);
 		$qry1 = "select * from admin where email='".$_POST['email']."' and password = '".$_POST['password']."'";
 		$qry2 = "select * from admin where email='".$_POST['email']."'";
 		$result1 = mysqli_query($conn,$qry1);
